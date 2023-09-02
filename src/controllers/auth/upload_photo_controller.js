@@ -53,7 +53,7 @@ module.exports = async (req, res, next) => {
         userId: userDoc._id,
         programme: userDoc.programme,
       },
-      process.env.JWT_TOKEN
+      process.env.staging.JWT_TOKEN
     );
 
     res.status(201).json({

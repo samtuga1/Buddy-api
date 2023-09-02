@@ -1,12 +1,12 @@
 require("dotenv").config();
 
 const firebaseConfig = {
-  apiKey: process.env.API_KEY,
-  authDomain: process.env.AUTH_DOMAIN,
-  projectId: process.env.PROJECT_ID,
-  storageBucket: process.env.STORAGE_BUCKET,
-  messagingSenderId: process.env.MESSAGING_SENDER_ID,
-  appId: process.env.APP_ID,
+  apiKey: process.env.staging.API_KEY,
+  authDomain: process.env.staging.AUTH_DOMAIN,
+  projectId: process.env.staging.PROJECT_ID,
+  storageBucket: process.env.staging.STORAGE_BUCKET,
+  messagingSenderId: process.env.staging.MESSAGING_SENDER_ID,
+  appId: process.env.staging.APP_ID,
 };
 
 module.exports = firebaseConfig;
