@@ -1,6 +1,4 @@
-const { join } = require("path");
-
-require("dotenv").config({ path: join(__dirname, "..", ".env") });
+require("dotenv").config({ path: ".env.staging" });
 
 const firebaseConfig = {
   apiKey: process.env.API_KEY,
