@@ -11,7 +11,7 @@ module.exports = async (req, res, next) => {
     // if any, then we handle it and throw it to the next function
     if (!errors.isEmpty()) {
       const error = new Error("Validation error");
-      error.statusCode = 422;
+      error.statusCode = 401;
       error.data = errors.array();
       throw error;
     }
@@ -25,7 +25,7 @@ module.exports = async (req, res, next) => {
     // check if email has been expired, therefore does not exist
     if (!savedToken) {
       const error = new Error("An error occured");
-      error.data = "Invalid token, please request again";
+      error.data = "Invalid token, please check verification token again";
       error.statusCode = 404;
       throw error;
     }
@@ -47,7 +47,7 @@ module.exports = async (req, res, next) => {
     if (user.isVerified) {
       const error = new Error();
       error.data = "Account has already been verified please login";
-      error.statusCode = 409;
+      error.statusCode = 401;
       throw error;
     }
 

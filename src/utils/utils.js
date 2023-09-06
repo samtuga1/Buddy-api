@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({ path: ".env.staging" });
 
 exports.randomCharacters = (length) => {
   const characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";

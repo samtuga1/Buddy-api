@@ -37,7 +37,7 @@ router.post(
 );
 
 // VERRIFY VERIFICATION CODE
-router.post("/verify", [baseEmailValidator()], verifyEmailController);
+router.post("/verify", verifyEmailController);
 
 // POST ONBOARDING DETAILS
 router.post(

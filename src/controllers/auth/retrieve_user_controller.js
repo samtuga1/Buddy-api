@@ -16,8 +16,12 @@ module.exports = async (req, res, next) => {
       throw error;
     }
 
+    const userToObject = { ...userDoc.toObject() };
+
+    delete userToObject.password;
+
     res.status(200).json({
-      user: userDoc.toObject(),
+      user: userToObject,
     });
   } catch (err) {
     next(err);

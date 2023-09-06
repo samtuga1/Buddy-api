@@ -26,7 +26,7 @@ module.exports = async (req, res, next) => {
 
     const storageRef = ref(
       firebaseStorage,
-      `images/profiles/${userDoc._id}/${req.file.originalname}`
+      `staging/images/profiles/${userDoc._id}/$photo`
     );
 
     // Create file metadata including the content type
@@ -53,11 +53,16 @@ module.exports = async (req, res, next) => {
         userId: userDoc._id,
         programme: userDoc.programme,
       },
-      process.env.staging.JWT_TOKEN
+      process.env.JWT_TOKEN
     );
 
+    const userObject = { ...userDoc.toObject() };
+
+    // avoid sending the password to the frontend
+    delete userObject.password;
+
     res.status(201).json({
-      user: userDoc.toObject(),
+      user: userObject,
       token: jwtToken,
     });
   } catch (err) {
