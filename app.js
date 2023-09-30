@@ -48,10 +48,10 @@ app.use("/", (req, res, next) => {
 });
 
 mongoose
-  .connect(process.env.production.DB_CONNECTION_URL)
+  .connect(process.env.DB_CONNECTION_URL)
   .then(() => {
     //Initialize a firebase application
     initializeApp(firebaseConfig);
-    app.listen(process.env.production.PORT);
+    app.listen(process.env.PORT);
   })
   .catch((err) => {});

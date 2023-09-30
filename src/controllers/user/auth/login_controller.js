@@ -42,7 +42,7 @@ module.exports = async (req, res, next) => {
         userId: savedUserDoc._id,
         programme: savedUserDoc.programme,
       },
-      process.env.production.JWT_TOKEN
+      process.env.JWT_TOKEN
     );
 
     const userObject = { ...savedUserDoc.toObject() };

@@ -52,18 +52,18 @@ module.exports = async (req, res, next) => {
 
     // define the tranporter for sending emails
     const transporter = nodemailer.createTransport({
-      host: process.env.production.NODE_MAILER_HOST,
-      port: process.env.production.NODE_MAILER_PORT,
+      host: process.env.NODE_MAILER_HOST,
+      port: process.env.NODE_MAILER_PORT,
       auth: {
-        user: process.env.production.NODE_MAILER_EMAIL,
-        pass: process.env.production.NODE_MAILER_PASSWORD,
+        user: process.env.NODE_MAILER_EMAIL,
+        pass: process.env.NODE_MAILER_PASSWORD,
       },
     });
 
     // use our transporter to send the email to the user
     transporter.sendMail(
       {
-        from: process.env.production.APP_NAME + "@gmail.com",
+        from: process.env.APP_NAME + "@gmail.com",
         to: email,
         subject: emailSubject,
         text: emailText,
