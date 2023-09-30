@@ -1,4 +1,4 @@
-const User = require("../../models/user.js");
+const User = require("../../../models/user.js");
 const { validationResult } = require("express-validator");
 
 module.exports = async (req, res, next) => {
@@ -7,7 +7,7 @@ module.exports = async (req, res, next) => {
 
     if (!errors.isEmpty()) {
       const error = new Error("Validation error");
-      error.statusCode = 422;
+      error.statusCode = 401;
       error.data = errors.array();
       throw error;
     }
@@ -22,7 +22,7 @@ module.exports = async (req, res, next) => {
     await savedUserDoc.save();
 
     return res.status(200).json({
-      message: "success",
+      message: "Succuess",
     });
   } catch (err) {
     next(err);

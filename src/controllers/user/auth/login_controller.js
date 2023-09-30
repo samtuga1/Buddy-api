@@ -1,8 +1,8 @@
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-require("dotenv").config();
-const User = require("../../models/user.js");
+require("dotenv").config({ path: ".env" });
+const User = require("../../../models/user.js");
 
 module.exports = async (req, res, next) => {
   try {
@@ -11,7 +11,7 @@ module.exports = async (req, res, next) => {
 
     if (!errors.isEmpty()) {
       const error = new Error("Validation error");
-      error.statusCode = 422;
+      error.statusCode = 401;
       error.data = errors.array();
       throw error;
     }
@@ -20,12 +20,6 @@ module.exports = async (req, res, next) => {
     const { email, password } = req.body;
 
     const savedUserDoc = await User.findOne({ email: email });
-
-    if (!savedUserDoc.isVerified) {
-      return res.status(200).json({
-        message: "Account has not yet been verified",
-      });
-    }
 
     // check if password is correct
     var isEqual = await bcrypt.compare(password, savedUserDoc.password);
@@ -37,16 +31,27 @@ module.exports = async (req, res, next) => {
       throw error;
     }
 
+    if (!savedUserDoc.isVerified) {
+      return res.status(401).json({
+        message: "Account has not yet been verified",
+      });
+    }
+
     const jwtToken = jwt.sign(
       {
         userId: savedUserDoc._id,
         programme: savedUserDoc.programme,
       },
-      process.env.production.JWT_TOKEN
+      process.env.JWT_TOKEN
     );
 
+    const userObject = { ...savedUserDoc.toObject() };
+
+    // avoid sending the password to the frontend
+    delete userObject.password;
+
     res.status(200).json({
-      user: savedUserDoc.toObject(),
+      user: userObject,
       token: jwtToken,
     });
   } catch (err) {

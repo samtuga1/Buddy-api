@@ -2,9 +2,9 @@ const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 
-const User = require("../../models/user.js");
-const Token = require("../../models/token.js");
-const { randomCharacters } = require("../../utils/utils.js");
+const User = require("../../../models/user");
+const Token = require("../../../models/token.js");
+const { randomCharacters } = require("../../../utils/utils.js");
 
 module.exports = async (req, res, next) => {
   try {
@@ -14,7 +14,7 @@ module.exports = async (req, res, next) => {
     // if any, then we handle it and throw it to the next function
     if (!errors.isEmpty()) {
       const error = new Error("Validation error");
-      error.statusCode = 422;
+      error.statusCode = 401;
       error.data = errors.array();
       throw error;
     }
@@ -44,41 +44,39 @@ module.exports = async (req, res, next) => {
     const savedToken = await token.save();
 
     var emailSubject = "Account Verification Link";
-    var emailText =
-      "Hello " +
-      name +
-      ",\n\n" +
-      "To verify your email, please enter the code below in the verification box in UniPassco" +
-      "\n" +
-      savedToken.token;
+    var emailText = `
+    Hello ${name}\n\n 
+    To verify your email, please enter the code below in the verification box in UniPassco\n
+    ${savedToken.token}
+    `;
 
     // define the tranporter for sending emails
     const transporter = nodemailer.createTransport({
-      host: process.env.production.NODE_MAILER_HOST,
-      port: process.env.production.NODE_MAILER_PORT,
+      host: process.env.NODE_MAILER_HOST,
+      port: process.env.NODE_MAILER_PORT,
       auth: {
-        user: process.env.production.NODE_MAILER_EMAIL,
-        pass: process.env.production.NODE_MAILER_PASSWORD,
+        user: process.env.NODE_MAILER_EMAIL,
+        pass: process.env.NODE_MAILER_PASSWORD,
       },
     });
 
     // use our transporter to send the email to the user
     transporter.sendMail(
       {
-        from: process.env.production.APP_NAME + "@gmail.com",
+        from: process.env.APP_NAME + "@gmail.com",
         to: email,
         subject: emailSubject,
         text: emailText,
       },
       (err) => {
         if (err) {
-          // console.log(err);
           const error = new Error("Something happened, please try again later");
           error.statusCode = 500;
           throw error;
         }
+
         res.status(201).json({
-          message: "A verification code has been sent to " + email + ".",
+          message: "A verification token has been sent to your email",
         });
       }
     );
