@@ -18,11 +18,11 @@ app.use(cors());
 
 app.use(bodyParser.json());
 
-app.use(`/${process.env.BRANCH}/account/user`, authRoutes);
-app.use(`/${process.env.BRANCH}/questions`, questionsRoutes);
-app.use(`/${process.env.BRANCH}/discussions`, discussionsRoutes);
+app.use("/account/user", authRoutes);
+app.use("/questions", questionsRoutes);
+app.use("/discussions", discussionsRoutes);
 
-app.use(`/${process.env.BRANCH}/admin/questions`, adminQuestionsRoutes);
+app.use("/admin/questions", adminQuestionsRoutes);
 
 app.use((error, req, res, next) => {
   // set the status code here
