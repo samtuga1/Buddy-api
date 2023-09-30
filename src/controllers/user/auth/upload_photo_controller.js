@@ -55,7 +55,7 @@ module.exports = async (req, res, next) => {
         school: userDoc.school,
         programme: userDoc.programme,
       },
-      process.env.JWT_TOKEN
+      process.env.production.JWT_TOKEN
     );
 
     const userObject = { ...userDoc.toObject() };

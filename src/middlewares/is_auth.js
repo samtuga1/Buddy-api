@@ -15,7 +15,7 @@ module.exports = (req, res, next) => {
     const token = authHeader.split(" ")[1];
 
     // verify the token
-    const decodedToken = jwt.verify(token, process.env.JWT_TOKEN);
+    const decodedToken = jwt.verify(token, process.env.production.JWT_TOKEN);
 
     if (!decodedToken) {
       const error = new Error("Auth key is wrong");
