@@ -1,7 +1,7 @@
 const { validationResult } = require("express-validator");
 
-const Token = require("../../models/token.js");
-const User = require("../../models/user.js");
+const Token = require("../../../models/token.js");
+const User = require("../../../models/user.js");
 
 module.exports = async (req, res, next) => {
   try {

@@ -1,8 +1,8 @@
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-require("dotenv").config({ path: ".env.staging" });
-const User = require("../../models/user.js");
+require("dotenv").config({ path: ".env" });
+const User = require("../../../models/user.js");
 
 module.exports = async (req, res, next) => {
   try {

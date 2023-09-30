@@ -1,17 +1,16 @@
 const { validationResult } = require("express-validator");
-const bcrypt = require("bcrypt");
+require("dotenv").config({ path: ".env" });
 const nodemailer = require("nodemailer");
 
-const User = require("../../models/user.js");
-const Token = require("../../models/token.js");
-const { randomCharacters } = require("../../utils/utils.js");
+const User = require("../../../models/user");
+const Token = require("../../../models/token");
+const { randomCharacters } = require("../../../utils/utils");
 
 module.exports = async (req, res, next) => {
   try {
-    // check if there are validation errors
+    // handle validation errors
     const errors = validationResult(req);
 
-    // if any, then we handle it and throw it to the next function
     if (!errors.isEmpty()) {
       const error = new Error("Validation error");
       error.statusCode = 401;
@@ -19,35 +18,34 @@ module.exports = async (req, res, next) => {
       throw error;
     }
 
-    // destruct the user data here
-    const { name, email, password } = req.body;
+    // retrieve email from the body
+    const { email } = req.body;
 
-    // hash the password
-    const hashedPassword = await bcrypt.hash(password, 12);
+    const user = await User.findOne({ email: email });
 
-    const userDoc = new User({
-      name: name,
-      email: email,
-      password: hashedPassword,
-      isVerified: false,
-    });
+    // check if email is associated with any account
+    if (!user) {
+      const error = new Error("No account found for this email address");
+      error.statusCode = 404;
+      throw error;
+    }
 
-    // save the user to
-    const savedUser = await userDoc.save();
+    // find and delete all tokens associated with user incase the user request it multiple times
+    await Token.deleteMany({ userId: user._id });
 
-    // setup a new token
-    const token = new Token({
-      userId: savedUser._id,
+    // create a new token and associate it with the user
+    const token = await Token({
+      userId: user._id,
       token: randomCharacters(4),
     });
 
-    const savedToken = await token.save();
+    await token.save();
 
-    var emailSubject = "Account Verification Link";
+    var emailSubject = "Password reset link";
     var emailText = `
-    Hello ${name}\n\n 
-    To verify your email, please enter the code below in the verification box in UniPassco\n
-    ${savedToken.token}
+    Hello ${user.name}\n\n 
+    To reset your password, please enter the code below in the token field on Buddy\n
+    ${token.token}
     `;
 
     // define the tranporter for sending emails
@@ -70,18 +68,17 @@ module.exports = async (req, res, next) => {
       },
       (err) => {
         if (err) {
-          // console.log(err);
           const error = new Error("Something happened, please try again later");
           error.statusCode = 500;
           throw error;
         }
 
         res.status(201).json({
-          message: "A verification token has been sent to your email",
+          message: "A password reset token has been sent to your email",
         });
       }
     );
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 };

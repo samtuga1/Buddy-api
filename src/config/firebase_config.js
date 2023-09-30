@@ -1,4 +1,4 @@
-require("dotenv").config({ path: ".env.staging" });
+require("dotenv").config({ path: ".env" });
 
 const firebaseConfig = {
   apiKey: process.env.API_KEY,

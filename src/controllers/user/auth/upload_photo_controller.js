@@ -6,7 +6,7 @@ const {
 } = require("firebase/storage");
 const jwt = require("jsonwebtoken");
 
-const User = require("../../models/user.js");
+const User = require("../../../models/user.js");
 
 module.exports = async (req, res, next) => {
   try {
@@ -26,7 +26,7 @@ module.exports = async (req, res, next) => {
 
     const storageRef = ref(
       firebaseStorage,
-      `staging/images/profiles/${userDoc._id}/$photo`
+      `staging/images/profiles/${userDoc._id}/photo`
     );
 
     // Create file metadata including the content type
@@ -51,6 +51,7 @@ module.exports = async (req, res, next) => {
     const jwtToken = jwt.sign(
       {
         userId: userDoc._id,
+        school: userDoc.school,
         programme: userDoc.programme,
       },
       process.env.JWT_TOKEN

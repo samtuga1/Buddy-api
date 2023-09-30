@@ -21,16 +21,23 @@ const user_schema = Schema(
     },
     photo: {
       type: String,
-      default: "",
+      default: null,
     },
     school: {
       type: String,
-      default: "UG",
+      default: "University of Ghana",
     },
     isVerified: {
       type: Boolean,
       default: false,
     },
+    bookmarkedQuestions: [
+      {
+        type: Schema.Types.ObjectId,
+        default: [],
+        ref: "question",
+      },
+    ],
   },
   { versionKey: false }
 );

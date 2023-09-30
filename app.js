@@ -1,17 +1,28 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-require("dotenv").config({ path: ".env.staging" });
+require("dotenv").config({ path: ".env" });
 const { initializeApp } = require("firebase/app");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
-const authRoutes = require("./src/routes/auth.js");
+const authRoutes = require("./src/routes/user/auth.js");
+const questionsRoutes = require("./src/routes/user/questions.js");
+const adminQuestionsRoutes = require("./src/routes/admin/questions.js");
+const discussionsRoutes = require("./src/routes/user/discussions.js");
 const firebaseConfig = require("./src/config/firebase_config.js");
 
 const app = express();
 
+// Enable CORS for all routes (allow all origins)
+app.use(cors());
+
 app.use(bodyParser.json());
 
 app.use("/staging/account/user", authRoutes);
+app.use("/staging/questions", questionsRoutes);
+app.use("/staging/discussions", discussionsRoutes);
+
+app.use("/staging/admin/questions", adminQuestionsRoutes);
 
 app.use((error, req, res, next) => {
   // set the status code here
