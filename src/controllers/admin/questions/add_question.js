@@ -48,7 +48,7 @@ module.exports = async (req, res, next) => {
 
     const storageRef = ref(
       firebaseStorage,
-      `staging/questions/${courseCode}_${year}`
+      `${process.env.BRANCH}/questions/${courseCode}_${year}`
     );
 
     // Create file metadata including the content type

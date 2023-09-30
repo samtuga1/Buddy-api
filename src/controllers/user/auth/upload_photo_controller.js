@@ -5,6 +5,7 @@ const {
   uploadBytesResumable,
 } = require("firebase/storage");
 const jwt = require("jsonwebtoken");
+require("dotenv").config({ path: ".env" });
 
 const User = require("../../../models/user.js");
 
@@ -26,7 +27,7 @@ module.exports = async (req, res, next) => {
 
     const storageRef = ref(
       firebaseStorage,
-      `staging/images/profiles/${userDoc._id}/photo`
+      `${process.env.BRANCH}/images/profiles/${userDoc._id}/photo`
     );
 
     // Create file metadata including the content type

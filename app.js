@@ -18,11 +18,11 @@ app.use(cors());
 
 app.use(bodyParser.json());
 
-app.use("/staging/account/user", authRoutes);
-app.use("/staging/questions", questionsRoutes);
-app.use("/staging/discussions", discussionsRoutes);
+app.use(`/${process.env.BRANCH}/account/user`, authRoutes);
+app.use(`/${process.env.BRANCH}/questions`, questionsRoutes);
+app.use(`/${process.env.BRANCH}/discussions`, discussionsRoutes);
 
-app.use("/staging/admin/questions", adminQuestionsRoutes);
+app.use(`/${process.env.BRANCH}/admin/questions`, adminQuestionsRoutes);
 
 app.use((error, req, res, next) => {
   // set the status code here
@@ -54,6 +54,4 @@ mongoose
     initializeApp(firebaseConfig);
     app.listen(process.env.PORT);
   })
-  .catch((err) => {
-    console.log(err);
-  });
+  .catch((err) => {});
