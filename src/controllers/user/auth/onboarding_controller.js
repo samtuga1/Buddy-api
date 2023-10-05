@@ -12,12 +12,12 @@ module.exports = async (req, res, next) => {
       throw error;
     }
 
-    const { email, programme } = req.body;
+    const { email, college } = req.body;
 
     // find user with the email provided
     const savedUserDoc = await User.findOne({ email: email });
 
-    savedUserDoc.programme = programme;
+    savedUserDoc.college = college;
 
     await savedUserDoc.save();
 

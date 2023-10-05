@@ -49,8 +49,6 @@ app.use("/", (req, res, next) => {
   });
 });
 
-console.log(process.env.PORT);
-
 mongoose
   .connect(process.env.DB_CONNECTION_URL)
   .then(() => {

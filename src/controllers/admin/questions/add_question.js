@@ -9,7 +9,7 @@ const Question = require("../../../models/question");
 
 module.exports = async (req, res, next) => {
   try {
-    const { programme, courseName, courseCode, school, level, year, semester } =
+    const { college, courseName, courseCode, school, level, year, semester } =
       req.body;
 
     const question = await Question.findOne({
@@ -25,7 +25,7 @@ module.exports = async (req, res, next) => {
     }
 
     if (
-      !programme ||
+      !college ||
       !courseCode ||
       !courseName ||
       !school ||
@@ -34,8 +34,6 @@ module.exports = async (req, res, next) => {
       !semester ||
       !req.file
     ) {
-      console.log(req.body);
-      console.log(req.file);
       const error = new Error("All fields are required");
       error.statusCode = 401;
       throw error;
@@ -75,7 +73,7 @@ module.exports = async (req, res, next) => {
       level: level,
       semester: semester,
       year: year,
-      programme: programme,
+      college: college,
     });
 
     await questionDoc.save();
