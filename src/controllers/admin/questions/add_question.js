@@ -12,18 +12,6 @@ module.exports = async (req, res, next) => {
     const { college, courseName, courseCode, school, level, year, semester } =
       req.body;
 
-    const question = await Question.findOne({
-      courseCode: { $regex: new RegExp(courseCode, "i") },
-      year: { $regex: new RegExp(year, "i") },
-      semester: { $regex: new RegExp(semester, "i") },
-    });
-
-    if (question) {
-      const error = new Error("Question already exists in database");
-      error.statusCode = 401;
-      throw error;
-    }
-
     if (
       !college ||
       !courseCode ||
