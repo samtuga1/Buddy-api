@@ -40,7 +40,7 @@ module.exports = async (req, res, next) => {
     const jwtToken = jwt.sign(
       {
         userId: savedUserDoc._id,
-        programme: savedUserDoc.programme,
+        college: savedUserDoc.college,
       },
       process.env.JWT_TOKEN
     );

@@ -24,7 +24,7 @@ module.exports = (req, res, next) => {
     }
 
     req.userId = decodedToken.userId;
-    req.programme = decodedToken.programme;
+    req.college = decodedToken.college;
     req.school = decodedToken.school;
     next();
   } catch (err) {

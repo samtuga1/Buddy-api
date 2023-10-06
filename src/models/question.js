@@ -34,7 +34,7 @@ const question_schema = Schema(
       type: String,
       default: null,
     },
-    programme: {
+    college: {
       type: String,
       require: true,
     },

@@ -34,6 +34,8 @@ app.use((error, req, res, next) => {
   // set the reason for the error
   const data = Array.isArray(error.data) ? error.data[0].msg : error.data;
 
+  console.log(error);
+
   // send the json object to the frontend
   res.status(statusCode).json({
     message: data || title,
@@ -54,4 +56,6 @@ mongoose
     initializeApp(firebaseConfig);
     app.listen(process.env.PORT);
   })
-  .catch((err) => {});
+  .catch((err) => {
+    console.log(err);
+  });

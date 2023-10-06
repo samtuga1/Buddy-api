@@ -43,7 +43,7 @@ router.post("/verify", verifyEmailController);
 // POST ONBOARDING DETAILS
 router.post(
   "/onboarding",
-  [baseTextValidator("programme")],
+  [baseTextValidator("college")],
   onboardingController
 );
 

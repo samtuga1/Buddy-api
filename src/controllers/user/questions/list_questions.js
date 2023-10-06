@@ -2,11 +2,11 @@ const Question = require("../../../models/question");
 
 module.exports = async (req, res, next) => {
   try {
-    // retrieve the programme the user offers from the request
-    const programme = req.programme;
+    // retrieve the college the user offers from the request
+    const college = req.college;
     const school = req.school;
 
-    console.log(programme);
+    console.log(college);
     console.log(school);
 
     // retrieve the level pressed
@@ -17,7 +17,7 @@ module.exports = async (req, res, next) => {
 
     const questionsArray = await Question.find({
       school: { $regex: new RegExp(school, "i") },
-      programme: { $regex: new RegExp(programme, "i") }, // 'i' flag for case-insensitive matching
+      college: { $regex: new RegExp(college, "i") }, // 'i' flag for case-insensitive matching
       level: level,
     })
       .select("-userHasBookmarked -discussions")
@@ -26,7 +26,7 @@ module.exports = async (req, res, next) => {
 
     const totalCount = await Question.find({
       school: { $regex: new RegExp(school, "i") },
-      programme: { $regex: new RegExp(programme, "i") }, // 'i' flag for case-insensitive matching
+      college: { $regex: new RegExp(college, "i") }, // 'i' flag for case-insensitive matching
       level: level,
     })
       .select("-discussions")

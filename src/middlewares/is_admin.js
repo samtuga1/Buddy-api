@@ -22,7 +22,7 @@
 //         }
 
 //         req.userId = decodedToken.userId;
-//         req.programme = decodedToken.programme;
+//         req.college = decodedToken.college;
 //         next();
 //       } catch (err) {
 //         next(err);

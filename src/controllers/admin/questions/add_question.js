@@ -9,7 +9,7 @@ const Question = require("../../../models/question");
 
 module.exports = async (req, res, next) => {
   try {
-    const { programme, courseName, courseCode, school, level, year, semester } =
+    const { college, courseName, courseCode, school, level, year, semester } =
       req.body;
 
     const question = await Question.findOne({
@@ -25,7 +25,7 @@ module.exports = async (req, res, next) => {
     }
 
     if (
-      !programme ||
+      !college ||
       !courseCode ||
       !courseName ||
       !school ||
@@ -34,8 +34,6 @@ module.exports = async (req, res, next) => {
       !semester ||
       !req.file
     ) {
-      console.log(req.body);
-      console.log(req.file);
       const error = new Error("All fields are required");
       error.statusCode = 401;
       throw error;
@@ -43,12 +41,26 @@ module.exports = async (req, res, next) => {
 
     const mimetype = req.file.originalname.split(".").pop();
 
+    let questionDoc = new Question({
+      fileUrl: "",
+      mimeType: mimetype,
+      school: school,
+      courseName: courseName,
+      courseCode: courseCode,
+      level: level,
+      semester: semester,
+      year: year,
+      college: college,
+    });
+
+    questionDoc = await questionDoc.save();
+
     // Initialize Cloud Storage and get a reference to the service
     const firebaseStorage = getStorage();
 
     const storageRef = ref(
       firebaseStorage,
-      `${process.env.BRANCH}/questions/${courseCode}_${year}`
+      `${process.env.BRANCH}/questions/${questionDoc._id}_${courseCode}`
     );
 
     // Create file metadata including the content type
@@ -66,19 +78,9 @@ module.exports = async (req, res, next) => {
     // Grab the public url
     const downloadURL = await getDownloadURL(snapshot.ref);
 
-    const questionDoc = new Question({
-      fileUrl: downloadURL,
-      mimeType: mimetype,
-      school: school,
-      courseName: courseName,
-      courseCode: courseCode,
-      level: level,
-      semester: semester,
-      year: year,
-      programme: programme,
-    });
+    questionDoc.fileUrl = downloadURL;
 
-    await questionDoc.save();
+    questionDoc = await questionDoc.save();
 
     res.status(201).json(questionDoc.toObject());
   } catch (error) {

@@ -14,7 +14,7 @@ const user_schema = Schema(
       type: String,
       require: true,
     },
-    programme: {
+    college: {
       type: String,
       require: false,
       default: null,
